@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="prism.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="prism.js"></script>
+    
+    <title>Resaltador de MicroPython</title>
+    
+</head>
+
+<body>
+
+    <h1>Resaltador de MicroPython</h1>
+    <input type="text" id="fileName" placeholder="Nombre del archivo sin extensión" />
+    <textarea id="codeInput" placeholder="Escribe tu código MicroPython aquí..."></textarea>
+    <button onclick="addCode()">Agregar Código</button>
+
+    <h2>Código Resaltado y HTML para Embed:</h2>
+    <div class="output-container">
+        <div>
+            <h3>Código Resaltado:</h3>
+            <pre class="line-numbers"><code id="codeOutput" class="language-python"></code></pre>
+            <div class="file-info" id="fileInfo"></div>
+        </div>
+        <div>
+            <h3>Código HTML para Embed:</h3>
+            <div class="code-output">
+                <code id="htmlOutput"></code>
+            </div>
+            <button onclick="copyCode()">Copiar Código</button>
+            <div class="copy-message" id="copyMessage">¡Código copiado!</div>
+        </div>
+    </div>
+
+    <script>
+        function addCode() {
+            const codeInput = document.getElementById('codeInput').value;
+            const codeOutput = document.getElementById('codeOutput');
+            const htmlOutput = document.getElementById('htmlOutput');
+            const fileName = document.getElementById('fileName').value || 'sin_nombre';
+
+            // Limpiar el código anterior
+            codeOutput.innerHTML = '';
+            htmlOutput.innerHTML = '';
+
+            // Escapar caracteres especiales en el código
+            const escapedCode = codeInput.replace(/&/g, '&amp;')
+                                          .replace(/</g, '&lt;')
+                                          .replace(/>/g, '&gt;')
+                                          .replace(/"/g, '&quot;')
+                                          .replace(/'/g, '&#39;');
+
+            // Insertar el nuevo código
+            codeOutput.innerHTML = escapedCode;
+
+            // Actualizar el nombre del archivo y el autor
+            const fileInfo = `Raspberry Pi Buenos Aires | ${fileName}.py`;
+            document.getElementById('fileInfo').innerHTML = fileInfo;
+
+            // Forzar Prism.js a resaltar el nuevo código
+            Prism.highlightElement(codeOutput);
+
+            // Generar el HTML completo para embed
+            htmlOutput.innerText = 
+`<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content=""width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/PIBSAS/syntax/prism.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/PIBSAS/syntax/style.min.css" />
+</head>
+<style>
+    body {
+        background-color: transparent !important; /* Eliminar fondo global */
+        margin: 0; /* Quitar márgenes que puedan agregar espacio */
+        border: none !important; /* Quitar borde */
+    }
+     pre {
+        border: none !important; /* Quitar borde */
+        margin: 0;
+        padding: 0;
+    }
+</style>
+<body>
+    <script src="https://cdn.jsdelivr.net/gh/PIBSAS/syntax/prism.min.js"><\/script>
+    <pre class="line-numbers"><code class="language-python">${escapedCode}</code></pre>
+    <div class="file-info">${fileInfo}</div>
+</body>
+</html>`;
+        }
+
+        function copyCode() {
+            const htmlOutput = document.getElementById('htmlOutput').innerText;
+            navigator.clipboard.writeText(htmlOutput).then(() => {
+                const copyMessage = document.getElementById('copyMessage');
+                copyMessage.style.display = 'block'; // Mostrar mensaje de copia
+                setTimeout(() => {
+                    copyMessage.style.display = 'none'; // Ocultar mensaje después de 2 segundos
+                }, 2000);
+            });
+        } 
+    </script>
+</body>
+</html>
