@@ -7,22 +7,22 @@
     <link rel="stylesheet" href="style.css" />
     <script src="prism.js"></script>
     
-    <title>Resaltador de MicroPython</title>
+    <title>JS Hightlighter/title>
     
 </head>
 
 <body>
 
-    <h1>Resaltador de MicroPython</h1>
+    <h1>JS Hightlighter</h1>
     <input type="text" id="fileName" placeholder="Nombre del archivo sin extensión" />
-    <textarea id="codeInput" placeholder="Escribe tu código MicroPython aquí..."></textarea>
+    <textarea id="codeInput" placeholder="Escribe tu código JS aquí..."></textarea>
     <button onclick="addCode()">Agregar Código</button>
 
     <h2>Código Resaltado y HTML para Embed:</h2>
     <div class="output-container">
         <div>
             <h3>Código Resaltado:</h3>
-            <pre class="line-numbers"><code id="codeOutput" class="language-python"></code></pre>
+            <pre class="line-numbers"><code id="codeOutput" class="language-js"></code></pre>
             <div class="file-info" id="fileInfo"></div>
         </div>
         <div>
@@ -57,7 +57,7 @@
             codeOutput.innerHTML = escapedCode;
 
             // Actualizar el nombre del archivo y el autor
-            const fileInfo = `Raspberry Pi Buenos Aires | ${fileName}.py`;
+            const fileInfo = `Luciano's tech | ${fileName}.js`;
             document.getElementById('fileInfo').innerHTML = fileInfo;
 
             // Forzar Prism.js a resaltar el nuevo código
@@ -87,7 +87,7 @@
 </style>
 <body>
     <script src="https://cdn.jsdelivr.net/gh/PIBSAS/syntax/prism.min.js"><\/script>
-    <pre class="line-numbers"><code class="language-python">${escapedCode}</code></pre>
+    <pre class="line-numbers"><code class="language-js">${escapedCode}</code></pre>
     <div class="file-info">${fileInfo}</div>
 </body>
 </html>`;
